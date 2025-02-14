@@ -89,8 +89,7 @@ Partial Class PatternGame
         ' 
         AutoScaleDimensions = New SizeF(7.0F, 15.0F)
         AutoScaleMode = AutoScaleMode.Font
-        ' Corrected BackgroundImage to reference the right resource
-        BackgroundImage = My.Resources.geometricBG  ' Correct resource
+        BackgroundImage = My.Resources.geometricBG
         ClientSize = New Size(525, 422)
         Controls.Add(btnExit)
         Controls.Add(btnSubmit)

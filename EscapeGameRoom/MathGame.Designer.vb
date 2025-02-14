@@ -99,8 +99,7 @@ Partial Class MathGame
         ' 
         ' MathGame
         ' 
-        ' Updated BackgroundImage to reference the correct resource
-        BackgroundImage = My.Resources.mathbg1  ' Use correct resource name
+        BackgroundImage = My.Resources.mathbg1
         ClientSize = New Size(800, 600)
         Controls.Add(Answer)
         Controls.Add(lblQuestion)
@@ -116,6 +115,7 @@ Partial Class MathGame
         Text = "Math Game"
         ResumeLayout(False)
         PerformLayout()
+
 
     End Sub
 

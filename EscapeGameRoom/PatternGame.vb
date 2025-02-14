@@ -4,10 +4,36 @@
     Dim timeLeft As Integer
     Dim currentSequence As List(Of Integer)
     Dim correctAnswer As Integer
+    Dim previousSequences As New List(Of List(Of Integer))()
+
+    ' Difficulty settings variables
+    Dim pointsPerCorrect As Integer
+    Dim pointsDeduction As Integer
+    Dim difficulty As String
+
+    ' Constructor to pass the selected difficulty
+    Public Sub New(selectedDifficulty As String)
+        InitializeComponent()
+        difficulty = selectedDifficulty
+    End Sub
 
     Private Sub PatternGame_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-        score = 0
-        timeLeft = 60
+        ' Set game parameters based on selected difficulty
+        Select Case difficulty
+            Case "Easy"
+                timeLeft = 90
+                pointsPerCorrect = 20
+                pointsDeduction = 10
+            Case "Normal"
+                timeLeft = 60
+                pointsPerCorrect = 15
+                pointsDeduction = 10
+            Case "Hard"
+                timeLeft = 30
+                pointsPerCorrect = 30
+                pointsDeduction = 25
+        End Select
+
         lblScore.Text = "Score: " & score
         lblTimeLeft.Text = "Time Left: " & timeLeft
 
@@ -36,10 +62,17 @@
         Dim stepValue As Integer = rand.Next(1, 5)
         Dim sequenceLength As Integer = 4
 
+        ' Generate a new sequence that hasn't been used before
         currentSequence = New List(Of Integer)
-        For i As Integer = 0 To sequenceLength - 1
-            currentSequence.Add(startNum + (i * stepValue))
-        Next
+        Do
+            currentSequence.Clear()
+            For i As Integer = 0 To sequenceLength - 1
+                currentSequence.Add(startNum + (i * stepValue))
+            Next
+        Loop While previousSequences.Contains(currentSequence)
+
+        ' Add the current sequence to the list of previously used sequences
+        previousSequences.Add(New List(Of Integer)(currentSequence))
 
         correctAnswer = startNum + (sequenceLength * stepValue)
 
@@ -50,15 +83,14 @@
         Dim userAnswer As Integer
         If Integer.TryParse(txtUserInput.Text, userAnswer) Then
             If userAnswer = correctAnswer Then
-                score += 10
-                lblScore.Text = "Score: " & score
+                score += pointsPerCorrect
             Else
-                score -= 10
+                score -= pointsDeduction
                 If score < 0 Then
                     score = 0
                 End If
-                lblScore.Text = "Score: " & score
             End If
+            lblScore.Text = "Score: " & score
         End If
 
         txtUserInput.Clear()

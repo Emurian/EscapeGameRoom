@@ -76,11 +76,42 @@
     Private currentRiddle As String
     Private correctAnswer As String
     Private score As Integer = 0
-    Private timeLeft As Integer = 60
+    Private timeLeft As Integer
+    Private pointsPerCorrect As Integer
+    Private pointsDeduction As Integer
+    Private difficulty As String ' Stores selected difficulty
+
+    ' Constructor to pass the difficulty level
+    Public Sub New(selectedDifficulty As String)
+        InitializeComponent()
+        difficulty = selectedDifficulty
+    End Sub
 
     Private Sub LogicGame_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-        GenerateRiddle()
+        ' Set game parameters based on selected difficulty
+        Select Case difficulty
+            Case "Easy"
+                timeLeft = 90
+                pointsPerCorrect = 20
+                pointsDeduction = 10
+            Case "Normal"
+                timeLeft = 60
+                pointsPerCorrect = 15
+                pointsDeduction = 10
+            Case "Hard"
+                timeLeft = 30
+                pointsPerCorrect = 30
+                pointsDeduction = 25
+        End Select
+
+        lblScore.Text = $"Score: {score}"
+        lblTimer.Text = $"Time: {timeLeft}"
+
+        ' Start the game timer
         timerGame.Start()
+
+        ' Generate the first riddle
+        GenerateRiddle()
     End Sub
 
     Private Sub GenerateRiddle()
@@ -102,9 +133,9 @@
         Dim userAnswer As String = txtAnswer.Text.Trim().ToLower()
 
         If userAnswer = correctAnswer Then
-            score += 10
+            score += pointsPerCorrect
         Else
-            score -= 10
+            score -= pointsDeduction
         End If
 
         lblScore.Text = $"Score: {score}"
